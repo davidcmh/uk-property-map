@@ -4,3 +4,4 @@ venv
 main/__pycache__
 app/__pycache__
 main/migrations/__pycache__
+.DS_Store
