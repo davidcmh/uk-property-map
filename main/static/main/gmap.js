@@ -49,12 +49,13 @@ $.ajaxSetup({
 
 function updateFeatureStyle(scale) {
   map.data.setStyle(function(feature) {
+    var opacity = parseFloat(feature.getProperty('transaction_count')) / 200;
     return /** @type {google.maps.Data.StyleOptions} */ ({
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
         scale: scale,
         fillColor: '#f00',
-        fillOpacity: 0.25,
+        fillOpacity: opacity,
         strokeWeight: 0
       }
     });
@@ -72,6 +73,9 @@ function generatePostcodeGeodata(data) {
       "geometry": {
         "type": "Point",
         "coordinates": [postcode.longitude, postcode.latitude]
+      },
+      "properties": {
+        "transaction_count": postcode.transaction_count
       }
     })
   });
@@ -109,7 +113,7 @@ function addPostcodeMarkers(mapBounds) {
 
   $.ajax({
     method: "POST",
-    url: "/postcodes",
+    url: "/transactions",
     contentType: 'application/json',
     data: JSON.stringify(mapBounds),
     dataType: "json",

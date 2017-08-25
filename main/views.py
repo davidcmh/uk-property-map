@@ -22,9 +22,9 @@ def dict_factory(cursor, row):
     return d
 
 
-def run_sql(query):
+def run_sql(query, db=environ['SQLITE_DB']):
     """Helper function to execute SQL query"""
-    conn = sqlite3.connect(environ['SQLITE_DB'])
+    conn = sqlite3.connect(db)
     conn.row_factory = dict_factory
     result = conn.execute(query).fetchall()
     conn.commit()
@@ -32,14 +32,15 @@ def run_sql(query):
     return result
 
 
-def postcodes(request):
+def transactions(request):
     map_bounds = json.loads(request.body)
     query = """
-        SELECT distinct `Postcode 3` as postcode, Longitude as longitude, Latitude as latitude
-        FROM postcodes
-        WHERE Longitude > {min_lon} AND Longitude < {max_lon}
-            AND Latitude > {min_lat} AND Latitude < {max_lat}
-        ;
+        SELECT p.Longitude longitude, p.Latitude latitude, count(t.transaction_id) as transaction_count
+        FROM postcodes as p 
+        JOIN transactions as t on t.postcode = p.`Postcode 3`
+        WHERE p.Longitude > {min_lon} AND p.Longitude < {max_lon}
+            AND p.Latitude > {min_lat} AND p.Latitude < {max_lat}
+        GROUP BY p.Longitude, p.Latitude;
     """.format(min_lon=map_bounds['longitude']['min'],
                max_lon=map_bounds['longitude']['max'],
                min_lat=map_bounds['latitude']['min'],

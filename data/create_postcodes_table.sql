@@ -1,6 +1,6 @@
 /* raw data from https://opendata.camden.gov.uk/Maps/National-Statistics-Postcode-Lookup-UK/tr8t-gqz7 */
 
-CREATE TABLE postcodes(
+CREATE TABLE postcodes (
   "Postcode 1" TEXT,
   "Postcode 2" TEXT,
   "Postcode 3" TEXT,
