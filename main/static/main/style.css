@@ -1,4 +1,4 @@
- #map {
+#map {
   height: 100%;
 }
 
@@ -6,4 +6,19 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+div#infobox {
+  position: absolute;
+  bottom: 25px;
+  left: 10px;
+  z-index: 5;
+  background: rgba(255,255,255,0.8);
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  width: 220px;
+  height: 300px;
+  box-shadow: 0px 0px 3px #888888;
+  display: none;
 }

@@ -75,7 +75,8 @@ function generatePostcodeGeodata(data) {
         "coordinates": [postcode.longitude, postcode.latitude]
       },
       "properties": {
-        "transaction_count": postcode.transaction_count
+        "transaction_count": postcode.transaction_count,
+        "distinct_postcodes": postcode.distinct_postcodes
       }
     })
   });
@@ -93,8 +94,8 @@ function addPostcodeMarkers(mapBounds) {
     return;
   }
   var markerScaleDict = {
-    16: 3,
-    17: 4
+    16: 4,
+    17: 5
   };
   var markerScale = markerScaleDict[zoomLvl] || 5;
   updateFeatureStyle(markerScale);
@@ -122,6 +123,24 @@ function addPostcodeMarkers(mapBounds) {
       map.data.addGeoJson(postcodeGeodata);
     }
   })
+
+  var marker;
+  map.data.addListener('click', function(event) {
+    if (marker) {
+        marker.setMap(null);
+    }
+	marker = new google.maps.Marker({
+      position: event.feature.getGeometry().get(),
+      map: map
+    });
+    document.getElementById("infobox").style.display = 'block';
+	document.getElementById("infobox").innerHTML="<p> Postcodes: " + event.feature.getProperty('distinct_postcodes') + "</p>" +
+	    "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
+	    "<p> Latitude: " + event.feature.getGeometry().b.lat() + "</p>" +
+	    "<p> Longitude: " + event.feature.getGeometry().b.lng() + "</p>"
+	;
+  });
+
 };
 
 var mapStyle = [{
