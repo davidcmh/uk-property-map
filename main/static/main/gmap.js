@@ -1,13 +1,20 @@
 var map;
+var distinctPostcodes;
 
 function initMap() {
   var london = {
     lat: 51.5,
     lng: -0.125
   };
+
+  // TODO: delete
+  var london = {
+    lat: 51.74474,
+    lng: -0.3447387
+  }
   map = new google.maps.Map(document.getElementById('map'), {
     center: london,
-    zoom: 14,
+    zoom: 16, // TODO: replace to be 14
     styles: mapStyle
   });
 
@@ -83,6 +90,17 @@ function generatePostcodeGeodata(data) {
   return postcodeData;
 }
 
+function hideTransactions() {
+    document.getElementById("transactions-table").style.display = "none";
+    document.getElementById("transactions-btn").innerHTML = "<i class='material-icons'>keyboard_arrow_right</i>";
+    document.getElementById("transactions-btn").onclick = showTransactions;
+};
+
+function showTransactions() {
+    document.getElementById("transactions-table").style.display = "inline-block";
+    document.getElementById("transactions-btn").innerHTML = "<i class='material-icons'>keyboard_arrow_left</i>";
+    document.getElementById("transactions-btn").onclick = hideTransactions;
+};
 
 function addPostcodeMarkers(mapBounds) {
   var zoomLvl = map.getZoom();
@@ -133,12 +151,22 @@ function addPostcodeMarkers(mapBounds) {
       position: event.feature.getGeometry().get(),
       map: map
     });
-    document.getElementById("infobox").style.display = 'block';
-	document.getElementById("infobox").innerHTML="<p> Postcodes: " + event.feature.getProperty('distinct_postcodes') + "</p>" +
-	    "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
-	    "<p> Latitude: " + event.feature.getGeometry().b.lat() + "</p>" +
-	    "<p> Longitude: " + event.feature.getGeometry().b.lng() + "</p>"
+    distinctPostcodes = event.feature.getProperty('distinct_postcodes')
+    document.getElementById("overlay-container").style.display = 'block';
+	document.getElementById("overlay-container").innerHTML= "<div id='summary-container'>" +
+                "<div id='transactions-summary'>" +
+                    "<p> Postcodes: " + distinctPostcodes + "</p>" +
+                    "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
+                    "<p> Latitude: " + event.feature.getGeometry().b.lat().toFixed(5) + "</p>" +
+                    "<p> Longitude: " + event.feature.getGeometry().b.lng().toFixed(5) + "</p>" +
+                "</div>" +
+                "<button id='transactions-btn' type='button'>" +
+                    "<i class='material-icons'>keyboard_arrow_right</i>" +
+                "</button>" +
+            "</div>" +
+            "<div id='transactions-table'> hello world </div>"
 	;
+	document.getElementById("transactions-btn").onclick = showTransactions;
   });
 
 };

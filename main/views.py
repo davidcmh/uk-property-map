@@ -36,7 +36,7 @@ def transactions(request):
     map_bounds = json.loads(request.body)
     query = """
         SELECT p.Longitude longitude, p.Latitude latitude, COUNT(t.transaction_id) as transaction_count,
-            GROUP_CONCAT(distinct t.postcode) distinct_postcodes
+            GROUP_CONCAT(DISTINCT t.postcode) distinct_postcodes
         FROM postcodes as p 
         JOIN transactions as t on t.postcode = p.`Postcode 3`
         WHERE p.Longitude > {min_lon} AND p.Longitude < {max_lon}
