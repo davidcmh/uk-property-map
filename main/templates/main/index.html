@@ -5,6 +5,7 @@
         <title>UK Property Transactions</title>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'main/bootstrap.min.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
         <script type="text/javascript" src="{% static 'main/jquery-3.2.1.min.js' %}"></script>
@@ -12,9 +13,13 @@
     </head>
     <body>
         <div id="map"></div>
-        <div id="overlay-container"></div>
+        <div class="container-fluid" id="overlay-container"></div>
         <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOoJ44GOthwGKGfQWqZAiD9izH1R2BYak&callback=initMap">
         </script>
+        <div id="preload-icons">
+            <i class='material-icons'>keyboard_arrow_left</i>
+            <i class='material-icons'>keyboard_arrow_right</i>
+        </div>
     </body>
 </html>

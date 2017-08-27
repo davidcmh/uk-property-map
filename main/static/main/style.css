@@ -1,5 +1,6 @@
 #map {
   height: 100%;
+  pointer-events:auto;
 }
 
 html, body {
@@ -11,7 +12,8 @@ html, body {
 div#overlay-container {
   position: absolute;
   height: 160px;
-  width: 100%;
+  width: 90%;
+  min-width: 600px;
   font-size: 14px;
   font-weight: 300;
   bottom: 25px;
@@ -20,15 +22,16 @@ div#overlay-container {
   text-align: left;
   font-family: 'Roboto','sans-serif';
   display: none;
+  pointer-events:none;
 }
 
 div#summary-container {
   /*display: inline-block;*/
-  float: left;
   box-shadow: 0px 0px 3px #888888;
   background: rgba(255,255,255,0.8);
-  width: 214px;
-  height: 100%;
+  height: 160px;
+  padding: 0;
+  pointer-events:auto;
 }
 
 div#transactions-summary {
@@ -36,12 +39,12 @@ div#transactions-summary {
   padding-left: 10px;
   line-height: 20px;
   height: 100%;
-  width: 180px;
+  float: none !important;
+  overflow: hidden;
 }
 
 #transactions-btn {
-  display: inline-block;
-  height: 100%;
+  height: 160px;
   float: right;
   font-weight: 300;
   border: none;
@@ -68,16 +71,12 @@ div#transactions-summary {
 
 #transactions-table {
   display: none;
-  height: 132px;
-  min-width: 400px;
-  max-width: 800px;
+  height: 160px;
   box-shadow: 0px 0px 3px #888888;
   background: rgba(255,255,255,0.8);
-  width: auto;
-  overflow: hidden;
-  float: none !important;
-  padding-top: 14px;
-  padding-bottom:14px;
-  padding-left: 10px;
-  padding-right: 10px;
+  pointer-events:none;
+}
+
+#preload-icons {
+  opacity: 0;
 }

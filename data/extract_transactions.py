@@ -132,11 +132,6 @@ if __name__ == '__main__':
 
     batch_size = 100
     for batch_num in range(math.ceil(distinct_postcode_count/ batch_size)):
-        # adhoc code, remove later
-        if batch_num < 11637:
-            continue
-
-
         stt = time.time()
         print('Loading batch {}'.format(batch_num))
         postcodes = get_postcodes_batch(batch_num, batch_size)

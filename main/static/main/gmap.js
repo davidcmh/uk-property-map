@@ -94,12 +94,14 @@ function hideTransactions() {
     document.getElementById("transactions-table").style.display = "none";
     document.getElementById("transactions-btn").innerHTML = "<i class='material-icons'>keyboard_arrow_right</i>";
     document.getElementById("transactions-btn").onclick = showTransactions;
+    document.getElementById("transactions-table").style.pointerEvents = "none";
 };
 
 function showTransactions() {
     document.getElementById("transactions-table").style.display = "inline-block";
     document.getElementById("transactions-btn").innerHTML = "<i class='material-icons'>keyboard_arrow_left</i>";
     document.getElementById("transactions-btn").onclick = hideTransactions;
+    document.getElementById("transactions-table").style.pointerEvents = "auto";
 };
 
 function addPostcodeMarkers(mapBounds) {
@@ -151,11 +153,12 @@ function addPostcodeMarkers(mapBounds) {
       position: event.feature.getGeometry().get(),
       map: map
     });
-    distinctPostcodes = event.feature.getProperty('distinct_postcodes')
+    distinctPostcodes = event.feature.getProperty('distinct_postcodes');
     document.getElementById("overlay-container").style.display = 'block';
-	document.getElementById("overlay-container").innerHTML= "<div id='summary-container'>" +
+	document.getElementById("overlay-container").innerHTML= "<div class='row'>" +
+	        "<div class='col-xs-12 col-sm-4 col-md-3' id='summary-container'>" +
                 "<div id='transactions-summary'>" +
-                    "<p> Postcodes: " + distinctPostcodes + "</p>" +
+                    "<p style='margin-top:10px;'> Postcodes: " + distinctPostcodes + "</p>" +
                     "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
                     "<p> Latitude: " + event.feature.getGeometry().b.lat().toFixed(5) + "</p>" +
                     "<p> Longitude: " + event.feature.getGeometry().b.lng().toFixed(5) + "</p>" +
@@ -164,7 +167,8 @@ function addPostcodeMarkers(mapBounds) {
                     "<i class='material-icons'>keyboard_arrow_right</i>" +
                 "</button>" +
             "</div>" +
-            "<div id='transactions-table'> hello world </div>"
+            "<div class='col-xs-12 col-sm-8 col-md-9' id='transactions-table'> hello world </div>"
+        "</div>"
 	;
 	document.getElementById("transactions-btn").onclick = showTransactions;
   });
