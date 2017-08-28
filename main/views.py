@@ -32,7 +32,7 @@ def run_sql(query, db=environ['SQLITE_DB']):
     return result
 
 
-def transactions(request):
+def transaction_summary(request):
     map_bounds = json.loads(request.body)
     query = """
         SELECT p.Longitude longitude, p.Latitude latitude, COUNT(t.transaction_id) as transaction_count,
@@ -49,3 +49,16 @@ def transactions(request):
                )
     result = run_sql(query)
     return HttpResponse(json.dumps(result))
+
+
+def transaction_list(request):
+    input = json.loads(request.body)
+    query = """
+        SELECT estate_type, property_type, transaction_category, price_paid, transaction_date, postcode, property_address  
+        FROM transactions
+        WHERE postcode IN ({postcodes});
+    """.format(postcodes=','.join(['"{}"'.format(p.strip())
+                                   for p in input['postcodes'].split(',')]))
+    result = run_sql(query)
+    return HttpResponse(json.dumps(result))
+

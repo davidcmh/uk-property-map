@@ -1,6 +1,8 @@
 var map;
 var distinctPostcodes;
 
+google.charts.load('current', {'packages':['table']});
+
 function initMap() {
   var london = {
     lat: 51.5,
@@ -102,6 +104,16 @@ function showTransactions() {
     document.getElementById("transactions-btn").innerHTML = "<i class='material-icons'>keyboard_arrow_left</i>";
     document.getElementById("transactions-btn").onclick = hideTransactions;
     document.getElementById("transactions-table").style.pointerEvents = "auto";
+    $.ajax({
+        method: "POST",
+        url: "/transaction-list",
+        contentType: 'application/json',
+        data: JSON.stringify({postcodes: distinctPostcodes}),
+        dataType: "json",
+        success: function(data) {
+          drawTable(data);
+        }
+    })
 };
 
 function addPostcodeMarkers(mapBounds) {
@@ -134,7 +146,7 @@ function addPostcodeMarkers(mapBounds) {
 
   $.ajax({
     method: "POST",
-    url: "/transactions",
+    url: "/transaction-summary",
     contentType: 'application/json',
     data: JSON.stringify(mapBounds),
     dataType: "json",
@@ -156,7 +168,7 @@ function addPostcodeMarkers(mapBounds) {
     distinctPostcodes = event.feature.getProperty('distinct_postcodes');
     document.getElementById("overlay-container").style.display = 'block';
 	document.getElementById("overlay-container").innerHTML= "<div class='row'>" +
-	        "<div class='col-xs-12 col-sm-4 col-md-3' id='summary-container'>" +
+	        "<div id='summary-container'>" +
                 "<div id='transactions-summary'>" +
                     "<p style='margin-top:10px;'> Postcodes: " + distinctPostcodes + "</p>" +
                     "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
@@ -167,13 +179,61 @@ function addPostcodeMarkers(mapBounds) {
                     "<i class='material-icons'>keyboard_arrow_right</i>" +
                 "</button>" +
             "</div>" +
-            "<div class='col-xs-12 col-sm-8 col-md-9' id='transactions-table'> hello world </div>"
+            "<div id='transactions-table'> </div>" +
         "</div>"
 	;
 	document.getElementById("transactions-btn").onclick = showTransactions;
   });
 
 };
+
+function drawTable(transactionData) {
+    var cssClassNames = {
+        'headerRow': 't-header',
+        'tableRow': 't-background t-font',
+        'oddTableRow': 't-background',
+        'selectedTableRow': 't-background',
+        'hoverTableRow': 't-hover',
+        'headerCell': 't-header',
+        'tableCell': 't-background t-font',
+        'rowNumberCell': 't-background'
+        };
+
+    var options = {
+        showRowNumber: true,
+        allowHtml: true,
+        cssClassNames: cssClassNames,
+        width: '100%',
+        height: '100%'
+        };
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Date');
+    data.addColumn('string', 'Estate type');
+    data.addColumn('string', 'Property type');
+    data.addColumn('string', 'Transaction category');
+    data.addColumn('number', 'Price paid');
+    data.addColumn('string', 'Postcode');
+    data.addColumn('string', 'Address');
+    var rows = [];
+    transactionData.forEach(function(row) {
+        rows.push([
+            row.transaction_date,
+            _.startCase(row.estate_type.split('/').pop()),
+            _.startCase(row.property_type.split('/').pop()),
+            _.startCase(row.transaction_category.split('/').pop()),
+            parseFloat(row.price_paid),
+            row.postcode,
+            row.property_address
+        ])
+    });
+
+    data.addRows(rows);
+
+    var table = new google.visualization.Table(document.getElementById('transactions-table'));
+
+    table.draw(data, options);
+}
 
 var mapStyle = [{
   'featureType': 'landscape',
