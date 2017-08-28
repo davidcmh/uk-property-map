@@ -5,18 +5,13 @@ google.charts.load('current', {'packages':['table']});
 
 function initMap() {
   var london = {
-    lat: 51.5,
-    lng: -0.125
+    lat: 51.51538,
+    lng: -0.17450
   };
 
-  // TODO: delete
-  var london = {
-    lat: 51.74474,
-    lng: -0.3447387
-  }
   map = new google.maps.Map(document.getElementById('map'), {
     center: london,
-    zoom: 16, // TODO: replace to be 14
+    zoom: 16,
     styles: mapStyle
   });
 
@@ -170,7 +165,7 @@ function addPostcodeMarkers(mapBounds) {
 	document.getElementById("overlay-container").innerHTML= "<div class='row'>" +
 	        "<div id='summary-container'>" +
                 "<div id='transactions-summary'>" +
-                    "<p style='margin-top:10px;'> Postcodes: " + distinctPostcodes + "</p>" +
+                    "<p style='margin-top:10px;'> Postcodes: " + distinctPostcodes.split(',').join(', ') + "</p>" +
                     "<p> Transaction count: " + event.feature.getProperty('transaction_count') + "</p>" +
                     "<p> Latitude: " + event.feature.getGeometry().b.lat().toFixed(5) + "</p>" +
                     "<p> Longitude: " + event.feature.getGeometry().b.lng().toFixed(5) + "</p>" +

@@ -32,6 +32,7 @@ div#summary-container {
   width: 220px;
   padding: 0;
   pointer-events:auto;
+  display: inline-block;
 }
 
 div#transactions-summary {
@@ -78,6 +79,7 @@ div#transactions-summary {
   background: rgba(255,255,255,0.8);
   pointer-events:none;
   padding: 0;
+  position: absolute;
 }
 
 #preload-icons {
