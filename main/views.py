@@ -54,9 +54,11 @@ def transaction_summary(request):
 def transaction_list(request):
     input = json.loads(request.body)
     query = """
-        SELECT estate_type, property_type, transaction_category, price_paid, transaction_date, postcode, property_address  
-        FROM transactions
-        WHERE postcode IN ({postcodes});
+        SELECT t.estate_type, t.property_type, t.transaction_category, t.price_paid, t.transaction_date, a.paon, a.saon, 
+               a.street, a.town, a.county, t.postcode
+        FROM transactions t
+        JOIN addresses a ON t.property_address = a.address
+        WHERE t.postcode IN ({postcodes});
     """.format(postcodes=','.join(['"{}"'.format(p.strip())
                                    for p in input['postcodes'].split(',')]))
     result = run_sql(query)

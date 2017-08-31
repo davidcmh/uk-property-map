@@ -208,8 +208,12 @@ function drawTable(transactionData) {
     data.addColumn('string', 'Property type');
     data.addColumn('string', 'Transaction category');
     data.addColumn('number', 'Price paid');
+    data.addColumn('string', 'PAON');
+    data.addColumn('string', 'SAON');
+    data.addColumn('string', 'Street');
+    data.addColumn('string', 'Town');
+    data.addColumn('string', 'County');
     data.addColumn('string', 'Postcode');
-    data.addColumn('string', 'Address');
     var rows = [];
     transactionData.forEach(function(row) {
         rows.push([
@@ -218,8 +222,12 @@ function drawTable(transactionData) {
             _.startCase(row.property_type.split('/').pop()),
             _.startCase(row.transaction_category.split('/').pop()),
             parseFloat(row.price_paid),
-            row.postcode,
-            row.property_address
+            _.startCase(_.snakeCase(row.paon)),
+            _.startCase(_.snakeCase(row.saon)),
+            _.startCase(_.snakeCase(row.street)),
+            _.startCase(_.snakeCase(row.town)),
+            _.startCase(_.snakeCase(row.county)),
+            row.postcode
         ])
     });
 
