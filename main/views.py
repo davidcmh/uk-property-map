@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.http import HttpResponse
-import sqlite3
-from os import environ
 import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-
+import os
+import MySQLdb
+import MySQLdb.cursors
+from django.conf import settings
 
 class HomeView(TemplateView):
     @method_decorator(ensure_csrf_cookie)
@@ -22,11 +23,24 @@ def dict_factory(cursor, row):
     return d
 
 
-def run_sql(query, db=environ['SQLITE_DB']):
+def run_sql(query):
     """Helper function to execute SQL query"""
-    conn = sqlite3.connect(db)
-    conn.row_factory = dict_factory
-    result = conn.execute(query).fetchall()
+    print(query)
+    if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+        conn = MySQLdb.connect(unix_socket=settings.DATABASES['default']['HOST'],
+                               port=3306,
+                               user='root',
+                               db='uk_property',
+                               cursorclass=MySQLdb.cursors.DictCursor)
+    else:
+        conn = MySQLdb.connect(host=settings.DATABASES['default']['HOST'],
+                               port=3306,
+                               user='root',
+                               db='uk_property',
+                               cursorclass=MySQLdb.cursors.DictCursor)
+    dict_cur = conn.cursor()
+    dict_cur.execute(query)
+    result = dict_cur.fetchall()
     conn.commit()
     conn.close()
     return result
@@ -35,13 +49,13 @@ def run_sql(query, db=environ['SQLITE_DB']):
 def transaction_summary(request):
     map_bounds = json.loads(request.body)
     query = """
-        SELECT p.Longitude longitude, p.Latitude latitude, COUNT(t.transaction_id) as transaction_count,
+        SELECT p.longitude, p.latitude, COUNT(t.transaction_id) as transaction_count,
             GROUP_CONCAT(DISTINCT t.postcode) distinct_postcodes
-        FROM postcodes as p 
-        JOIN transactions as t on t.postcode = p.`Postcode 3`
-        WHERE p.Longitude > {min_lon} AND p.Longitude < {max_lon}
-            AND p.Latitude > {min_lat} AND p.Latitude < {max_lat}
-        GROUP BY p.Longitude, p.Latitude;
+        FROM postcodes as p
+        JOIN transactions as t on t.postcode = p.postcode_3
+        WHERE p.longitude > {min_lon} AND p.longitude < {max_lon}
+            AND p.latitude > {min_lat} AND p.latitude < {max_lat}
+        GROUP BY p.longitude, p.latitude;
     """.format(min_lon=map_bounds['longitude']['min'],
                max_lon=map_bounds['longitude']['max'],
                min_lat=map_bounds['latitude']['min'],
@@ -54,7 +68,7 @@ def transaction_summary(request):
 def transaction_list(request):
     input = json.loads(request.body)
     query = """
-        SELECT t.estate_type, t.property_type, t.transaction_category, t.price_paid, t.transaction_date, a.paon, a.saon, 
+        SELECT t.estate_type, t.property_type, t.transaction_category, t.price_paid, t.transaction_date, a.paon, a.saon,
                a.street, a.town, a.county, t.postcode
         FROM transactions t
         JOIN addresses a ON t.property_address = a.address
@@ -63,4 +77,3 @@ def transaction_list(request):
                                    for p in input['postcodes'].split(',')]))
     result = run_sql(query)
     return HttpResponse(json.dumps(result))
-

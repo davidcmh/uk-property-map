@@ -111,7 +111,7 @@ function showTransactions() {
     })
 };
 
-function addPostcodeMarkers(mapBounds) {
+function addPostcodeMarkers() {
   var zoomLvl = map.getZoom();
   map.data.forEach(function(feature) {
     map.data.remove(feature);

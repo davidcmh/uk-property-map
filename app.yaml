@@ -1,0 +1,33 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /static
+  static_dir: static/
+- url: .*
+  script: app.wsgi.application
+
+# Only pure Python libraries can be vendored
+# Python libraries that use C extensions can
+# only be included if they are part of the App Engine SDK
+# Using Third Party Libraries: https://cloud.google.com/appengine/docs/python/tools/using-libraries-python-27
+libraries:
+- name: django
+  version: 1.11
+- name: MySQLdb
+  version: 1.2.5
+
+skip_files:
+  - db.sqlite3
+  - uk_property.sqlite3
+  - dumps/
+  - data/
+  - venv/
+  - venv2.7/
+  - ^(.*/)?#.*#$
+  - ^(.*/)?.*~$
+  - ^(.*/)?.*\.py[co]$
+  - ^(.*/)?.*/RCS/.*$
+  - ^(.*/)?\..*$
+  - ^env/.*$

@@ -1,7 +1,14 @@
 .idea
-db.sqlite3
-venv
+*.sqlite3
+venv/
 main/__pycache__
 app/__pycache__
 main/migrations/__pycache__
 .DS_Store
+static/
+data/
+*.pyc
+venv2.7/
+lib/
+env.sh
+dumps/
