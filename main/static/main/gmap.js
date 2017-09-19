@@ -1,5 +1,7 @@
 var map;
 var distinctPostcodes;
+var marker;
+var activeContainer;
 
 google.charts.load('current', {'packages':['table']});
 
@@ -22,6 +24,59 @@ function initMap() {
   });
 
   document.getElementById("comment-btn").onclick = showDisqusContainer;
+  document.getElementById("info-btn").onclick = showInfoContainer;
+
+  // Create the search box and link it to the UI element.
+    var input = document.getElementById('pac-input');
+    var infoBtn = document.getElementById('info-btn');
+    var commentBtn = document.getElementById('comment-btn');
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBtn);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(commentBtn);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    // Bias the SearchBox results towards current map's viewport.
+    map.addListener('bounds_changed', function() {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
+      var existingZoomLvl = map.getZoom();
+
+      if (places.length == 0) {
+        return;
+      }
+
+      // For each place, get the icon, name and location.
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function(place) {
+        if (!place.geometry) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+        if (marker) {
+            marker.setMap(null);
+        }
+
+        marker = new google.maps.Marker({
+          map: map,
+          title: place.name,
+          position: place.geometry.location
+        });
+
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      map.fitBounds(bounds);
+      map.setZoom(existingZoomLvl);
+    });
 }
 
 function getCookie(name) {
@@ -113,7 +168,23 @@ function showTransactions() {
     })
 };
 
+function hideOverlayContainerIfActive() {
+    if (activeContainer) {
+        if (activeContainer == 'disqus-container') {
+            hideDisqusContainer();
+        } else if (activeContainer == 'info-container') {
+            hideInfoContainer();
+        } else if (activeContainer == 'transaction-container') {
+            hideTransactionContainer();
+        }
+        activeContainer = null;
+    };
+
+};
+
 function showDisqusContainer() {
+    hideOverlayContainerIfActive();
+    activeContainer = "disqus-container";
     document.getElementById("disqus-container").style.display = 'block';
     document.getElementById("comment-btn").onclick = hideDisqusContainer;
     document.getElementById("comment-btn").style.background = '#d3d3d3';
@@ -125,6 +196,23 @@ function hideDisqusContainer() {
     document.getElementById("comment-btn").style.background = 'white';
 };
 
+function showInfoContainer() {
+    hideOverlayContainerIfActive();
+    activeContainer = "info-container";
+    document.getElementById("info-container").style.display = 'block';
+    document.getElementById("info-btn").onclick = hideInfoContainer;
+    document.getElementById("info-btn").style.background = '#d3d3d3';
+};
+
+function hideInfoContainer() {
+    document.getElementById("info-container").style.display = 'none';
+    document.getElementById("info-btn").onclick = showInfoContainer;
+    document.getElementById("info-btn").style.background = 'white';
+};
+
+function hideTransactionContainer() {
+    document.getElementById("transaction-container").style.display = 'none';
+};
 
 function addPostcodeMarkers() {
   var zoomLvl = map.getZoom();
@@ -166,8 +254,9 @@ function addPostcodeMarkers() {
     }
   })
 
-  var marker;
   map.data.addListener('click', function(event) {
+    hideOverlayContainerIfActive();
+    activeContainer = 'transaction-container';
     if (marker) {
         marker.setMap(null);
     }
@@ -176,8 +265,8 @@ function addPostcodeMarkers() {
       map: map
     });
     distinctPostcodes = event.feature.getProperty('distinct_postcodes');
-    document.getElementById("overlay-container").style.display = 'block';
-	document.getElementById("overlay-container").innerHTML= "<div class='row'>" +
+    document.getElementById("transaction-container").style.display = 'block';
+	document.getElementById("transaction-container").innerHTML= "<div class='row'>" +
 	        "<div id='summary-container'>" +
                 "<div id='transactions-summary'>" +
                     "<p style='margin-top:10px;'> Postcodes: " + distinctPostcodes.split(',').join(', ') + "</p>" +
@@ -194,8 +283,6 @@ function addPostcodeMarkers() {
 	;
 	document.getElementById("transactions-btn").onclick = showTransactions;
   });
-
-  document.getElementById("menu-bar").style.display = "block";
 };
 
 function drawTable(transactionData) {
@@ -262,7 +349,7 @@ var mapStyle = [{
 }, {
   'featureType': 'poi',
   'stylers': [{
-    'visibility': 'off'
+    'visibility': 'on'
   }]
 }, {
   'featureType': 'road',

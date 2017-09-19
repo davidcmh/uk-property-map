@@ -12,3 +12,4 @@ venv2.7/
 lib/
 env.sh
 dumps/
+static/main/style.css

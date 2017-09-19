@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>UK Property Transactions</title>
         {% load static %}
+        <link rel="icon" href="{% static 'main/map_icon.png' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'main/bootstrap.min.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -30,16 +31,23 @@
         <div id="main">
             <div id="map"></div>
             <div class="container-fluid" id="menu-bar">
-                <button id='comment-btn' type='button'>
+                <button class='menu-btn' id='info-btn' type='button'>
+                    <i class='material-icons'>info_outline</i>
+                </button>
+                <button class='menu-btn' id='comment-btn' type='button'>
                     <i class='material-icons'>comment</i>
                 </button>
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
             </div>
-            <div class="container-fluid" id="overlay-container"></div>
+            <div class="container-fluid" id="transaction-container"></div>
             <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZTv6rwoUGwJMTDxgpr2FIvPgfLtzRgxA&callback=initMap">
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZTv6rwoUGwJMTDxgpr2FIvPgfLtzRgxA&libraries=places&callback=initMap">
             </script>
             <div class="container-fluid" id="disqus-container">
                     <div id="disqus_thread"></div>
+            </div>
+            <div class="container-fluid" id="info-container">
+                About this app <br/>
             </div>
         </div>
         <script>

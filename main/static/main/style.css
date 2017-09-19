@@ -14,15 +14,6 @@ html, body {
   font-family: 'Roboto','sans-serif';
 }
 
-div#menu-bar {
-  position: absolute;
-  top: 10px;
-  left: 95px;
-  height: 29px;
-  z-index: 10;
-  display: none;
-}
-
 div#disqus-container {
   position: absolute;
   height: 251px;
@@ -31,7 +22,7 @@ div#disqus-container {
   font-weight: 300;
   bottom: 23px;
   left: 10px;
-  z-index: 10;
+  z-index: 20;
   text-align: left;
   font-family: 'Roboto','sans-serif';
   display: none;
@@ -40,7 +31,25 @@ div#disqus-container {
   overflow: scroll;
 }
 
-div#overlay-container {
+div#info-container {
+  position: absolute;
+  padding: 15px;
+  height: 251px;
+  width:calc(100% - 60px);
+  font-size: 14px;
+  font-weight: 300;
+  bottom: 23px;
+  left: 10px;
+  z-index: 15;
+  text-align: left;
+  font-family: 'Roboto','sans-serif';
+  display: none;
+  box-shadow: 0px 0px 3px #888888;
+  background: rgba(255,255,255,0.9);
+  overflow: scroll;
+}
+
+div#transaction-container {
   position: absolute;
   height: 251px;
   width:calc(100% - 60px);
@@ -48,7 +57,7 @@ div#overlay-container {
   font-weight: 300;
   bottom: 23px;
   left: 10px;
-  z-index: 5;
+  z-index: 10;
   text-align: left;
   font-family: 'Roboto','sans-serif';
   display: none;
@@ -75,9 +84,11 @@ div#transactions-summary {
   overflow: hidden;
 }
 
-#comment-btn {
+
+.menu-btn {
   float: left;
   font-weight: 300;
+  margin-top: 10px;
   border: none;
   background: white;
   color: rgba(0,0,0,0.6);
@@ -86,25 +97,46 @@ div#transactions-summary {
   width: 29px;
 }
 
-#comment-btn i {
+.menu-btn i {
   font-size: 19px;
   padding: 5px;
 }
 
-#comment-btn:hover {
+.menu-btn:hover {
   text-decoration: none;
-  background: rgb(235, 235, 235);
+  background: rgb(235, 235, 235)!important;
 }
 
-#comment-btn:focus {
-  -webkit-box-shadow: none;
+.menu-btn:focus {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
   outline: 0;
   background: #D3D3D3;
 }
 
-#comment-btn:active {
+.menu-btn:active {
   opacity: .75;
+}
+
+#pac-input {
+  width: 400px;
+  height: 29px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  margin-top: 10px;
+  margin-left: 10px;
+  border: 0;
+  text-indent: 10px;
+  font-size: 11px;
+  font-family: 'Roboto', 'Arial', 'sans-serif';
+}
+
+#pac-input:hover {
+  text-decoration: none;
+}
+
+#pac-input:focus {
+  -webkit-box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  outline: 0;
 }
 
 #transactions-btn {
@@ -167,3 +199,4 @@ div#transactions-summary {
 .t-hover {
   background: rgba(0,0,0,0.3);
 }
+
