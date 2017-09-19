@@ -20,6 +20,8 @@ function initMap() {
     window.clearTimeout(timeout);
     timeout = window.setTimeout(addPostcodeMarkers, 500);
   });
+
+  document.getElementById("comment-btn").onclick = showDisqusContainer;
 }
 
 function getCookie(name) {
@@ -111,6 +113,19 @@ function showTransactions() {
     })
 };
 
+function showDisqusContainer() {
+    document.getElementById("disqus-container").style.display = 'block';
+    document.getElementById("comment-btn").onclick = hideDisqusContainer;
+    document.getElementById("comment-btn").style.background = '#d3d3d3';
+};
+
+function hideDisqusContainer() {
+    document.getElementById("disqus-container").style.display = 'none';
+    document.getElementById("comment-btn").onclick = showDisqusContainer;
+    document.getElementById("comment-btn").style.background = 'white';
+};
+
+
 function addPostcodeMarkers() {
   var zoomLvl = map.getZoom();
   map.data.forEach(function(feature) {
@@ -180,6 +195,7 @@ function addPostcodeMarkers() {
 	document.getElementById("transactions-btn").onclick = showTransactions;
   });
 
+  document.getElementById("menu-bar").style.display = "block";
 };
 
 function drawTable(transactionData) {

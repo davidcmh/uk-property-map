@@ -29,10 +29,32 @@
         </div>
         <div id="main">
             <div id="map"></div>
+            <div class="container-fluid" id="menu-bar">
+                <button id='comment-btn' type='button'>
+                    <i class='material-icons'>comment</i>
+                </button>
+            </div>
             <div class="container-fluid" id="overlay-container"></div>
             <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZTv6rwoUGwJMTDxgpr2FIvPgfLtzRgxA&callback=initMap">
             </script>
+            <div class="container-fluid" id="disqus-container">
+                    <div id="disqus_thread"></div>
+            </div>
         </div>
+        <script>
+            var disqus_config = function () {
+                this.page.url = 'https://uk-property-map.appspot.com';
+                this.page.identifier = 'main';
+            };
+
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://uk-property-map.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     </body>
 </html>

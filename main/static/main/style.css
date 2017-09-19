@@ -14,6 +14,32 @@ html, body {
   font-family: 'Roboto','sans-serif';
 }
 
+div#menu-bar {
+  position: absolute;
+  top: 10px;
+  left: 95px;
+  height: 29px;
+  z-index: 10;
+  display: none;
+}
+
+div#disqus-container {
+  position: absolute;
+  height: 251px;
+  width:calc(100% - 60px);
+  font-size: 14px;
+  font-weight: 300;
+  bottom: 23px;
+  left: 10px;
+  z-index: 10;
+  text-align: left;
+  font-family: 'Roboto','sans-serif';
+  display: none;
+  box-shadow: 0px 0px 3px #888888;
+  background: rgba(255,255,255,0.9);
+  overflow: scroll;
+}
+
 div#overlay-container {
   position: absolute;
   height: 251px;
@@ -47,6 +73,38 @@ div#transactions-summary {
   height: 100%;
   float: none !important;
   overflow: hidden;
+}
+
+#comment-btn {
+  float: left;
+  font-weight: 300;
+  border: none;
+  background: white;
+  color: rgba(0,0,0,0.6);
+  padding: 0;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  width: 29px;
+}
+
+#comment-btn i {
+  font-size: 19px;
+  padding: 5px;
+}
+
+#comment-btn:hover {
+  text-decoration: none;
+  background: rgb(235, 235, 235);
+}
+
+#comment-btn:focus {
+  -webkit-box-shadow: none;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  outline: 0;
+  background: #D3D3D3;
+}
+
+#comment-btn:active {
+  opacity: .75;
 }
 
 #transactions-btn {
