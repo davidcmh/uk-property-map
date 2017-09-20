@@ -5,6 +5,14 @@ var activeContainer;
 
 google.charts.load('current', {'packages':['table']});
 
+$.ajax({
+    method: "GET",
+    url: "/get-like-count",
+    success: function(likeCount) {
+        document.getElementById("like-count").innerHTML = likeCount;
+    }
+})
+
 function initMap() {
   var london = {
     lat: 51.51538,
@@ -25,14 +33,17 @@ function initMap() {
 
   document.getElementById("comment-btn").onclick = showDisqusContainer;
   document.getElementById("info-btn").onclick = showInfoContainer;
+  document.getElementById("like-btn").onclick = incrementLikeCount;
 
   // Create the search box and link it to the UI element.
     var input = document.getElementById('pac-input');
     var infoBtn = document.getElementById('info-btn');
     var commentBtn = document.getElementById('comment-btn');
+    var likeBtn = document.getElementById('like-btn');
     var searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(infoBtn);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(commentBtn);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(likeBtn);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     // Bias the SearchBox results towards current map's viewport.
@@ -212,6 +223,30 @@ function hideInfoContainer() {
 
 function hideTransactionContainer() {
     document.getElementById("transaction-container").style.display = 'none';
+};
+
+function incrementLikeCount() {
+    document.getElementById("like-btn").onclick = decrementLikeCount;
+    document.getElementById("like-btn").style.color =  '#2f6f56';
+    $.ajax({
+        method: "GET",
+        url: "/increment-like-count",
+        success: function(likeCount) {
+            document.getElementById("like-count").innerHTML = likeCount;
+        }
+    })
+};
+
+function decrementLikeCount() {
+    document.getElementById("like-btn").onclick = incrementLikeCount;
+    document.getElementById("like-btn").style.color =  'rgba(0,0,0,0.6)';
+    $.ajax({
+        method: "GET",
+        url: "/decrement-like-count",
+        success: function(likeCount) {
+            document.getElementById("like-count").innerHTML = likeCount;
+        }
+    })
 };
 
 function addPostcodeMarkers() {

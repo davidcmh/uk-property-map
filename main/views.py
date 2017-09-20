@@ -77,3 +77,31 @@ def transaction_list(request):
                                    for p in input['postcodes'].split(',')]))
     result = run_sql(query)
     return HttpResponse(json.dumps(result))
+
+
+def increment_like_count(request):
+    query = """
+        UPDATE app_variables SET `value`=`value`+1 WHERE `name`='like_count';
+    """
+    run_sql(query)
+
+    return get_like_count()
+
+
+def decrement_like_count(request):
+    query = """
+        UPDATE app_variables SET `value`=`value`-1 WHERE `name`='like_count';
+    """
+    run_sql(query)
+
+    return get_like_count()
+
+
+def get_like_count(request=None):
+    query = """
+        SELECT `value` from app_variables WHERE `name`='like_count';
+    """
+    result = run_sql(query)
+    like_count = result[0]['value']
+
+    return HttpResponse(like_count)

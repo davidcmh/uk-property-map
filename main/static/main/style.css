@@ -117,6 +117,30 @@ div#transactions-summary {
   opacity: .75;
 }
 
+#like-btn {
+  width: auto;
+  margin-right: 10px;
+}
+
+#like-btn:focus {
+  background: white;
+}
+
+#like-btn i {
+  display: inline-block;
+  float: left;
+}
+
+#like-count {
+  margin-top: 8px;
+  margin-right: 8px;
+  font-size: 11px;
+  font-family: 'Roboto', 'Arial', 'sans-serif';
+  color: black!important;
+  display: inline-block;
+  float: left;
+}
+
 #pac-input {
   width: 400px;
   height: 29px;
