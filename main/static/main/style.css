@@ -84,7 +84,6 @@ div#transactions-summary {
   overflow: hidden;
 }
 
-
 .menu-btn {
   float: left;
   font-weight: 300;
@@ -139,6 +138,33 @@ div#transactions-summary {
   color: black!important;
   display: inline-block;
   float: left;
+}
+
+#about-close-btn-wrapper {
+  position: absolute;
+  top: 2px;
+  right: 36px;
+}
+
+#about-close-btn {
+  font-size: 19px;
+  padding: 5px;
+  position: fixed;
+  outline: 0;
+  background: none;
+  border: 0;
+}
+
+#about-close-btn:hover {
+  opacity: .75;
+}
+
+#about-close-btn:focus {
+  outline: 0;
+}
+
+#about-close-btn:active {
+  opacity: .5;
 }
 
 #pac-input {
@@ -224,3 +250,16 @@ div#transactions-summary {
   background: rgba(0,0,0,0.3);
 }
 
+.about-title {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.about-header{
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.about-bullet-bold {
+  font-weight: 400;
+}

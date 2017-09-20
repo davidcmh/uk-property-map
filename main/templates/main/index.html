@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'main/bootstrap.min.css' %}" />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="{% static 'main/jquery-3.2.1.min.js' %}"></script>
         <script src="{% static 'main/lodash.min.js' %}"></script>
@@ -31,13 +32,13 @@
         <div id="main">
             <div id="map"></div>
             <div class="container-fluid" id="menu-bar">
-                <button class='menu-btn' id='info-btn' type='button'>
+                <button class='menu-btn' id='info-btn' type='button' title="Site information">
                     <i class='material-icons'>info_outline</i>
                 </button>
-                <button class='menu-btn' id='comment-btn' type='button'>
+                <button class='menu-btn' id='comment-btn' type='button' title="Comments">
                     <i class='material-icons'>comment</i>
                 </button>
-                <button class='menu-btn' id='like-btn' type='button'>
+                <button class='menu-btn' id='like-btn' type='button' title="Thumb up if you like the site!">
                     <i class='material-icons'>thumb_up</i>
                     <div id="like-count"></div>
                 </button>
@@ -51,7 +52,104 @@
                     <div id="disqus_thread"></div>
             </div>
             <div class="container-fluid" id="info-container">
-                About this app <br/>
+                <div id="about-close-btn-wrapper">
+                    <button id='about-close-btn' type='button'>
+                        <i class="material-icons">close</i>
+                    </button>
+                </div>
+                <div id="about-content">
+                    <div class="about-title">About this site</div> <br/>
+                    <p>
+                        This is a side project created by <a href="https://www.linkedin.com/in/davidcmh/">David Chia</a> as
+                        a practice to build an end-to-end web application
+                        integrating different technologies and APIs. It is designed to visualise the varying number of
+                        residential property transactions across London. Clicking on each
+                        red dot opens up a panel that shows the total number of transactions at the location. The panel can then
+                        be further expanded to list individual transaction details, including transaction date, price and property
+                        address.
+                    </p>
+                    <p>
+                        See below for more detailed usage and technical notes. If you can’t wait to explore the site, do
+                        dive in right away. Also, feel free to leave a comment or a thumb up. Thanks for visiting!
+                    </p>
+                    <br/>
+
+                    <div class="about-header">Site elements and usage</div>
+                    <ul>
+                        <li>
+                            <div class="about-bullet-bold">Standard Google Maps buttons</div>
+                            Map and Satellite buttons on the top left corner allow you to toggle map view. Also there are
+                            full screen button on the top right corner, zoom in/out buttons on the bottom right corner.
+                        </li>
+                        <li>
+                            <div class="about-bullet-bold">Site-specific buttons</div>
+                            Information, comment and thumb up buttons specific to this site can be found on the top left
+                            corner. Clicking on information and comment buttons will bring up their respective panels at
+                            the bottom of the page.
+                        </li>
+                        <li>
+                            <div class="about-bullet-bold">Search bar</div>
+                            Standard Google Maps search is enabled using Places API. Simply type in any input and it will
+                            return a set of recommended result, which you can then select from.
+                        </li>
+                        <li>
+                            <div class="about-bullet-bold">Red dots</div>
+                            <ul>
+                                <li>
+                                    Interaction: Each red dot represents a pair of Latitude-Longitude coordinates that
+                                    contain one or more postcodes. When you click on a red dot, it will bring up a panel on
+                                    bottom right corner which shows the number of transactions that have taken place at the
+                                    location. Click on this summary panel to see a complete list of individual transaction
+                                    details.
+                                </li>
+                                <li>
+                                    Visibility: In order to prevent over-crowding of red dots, the red dots are designed to
+                                    show up only at zoom level 16 or more. Zoom level 16 is the default zoom level when you
+                                    first access the app; if you zoom out below zoom level 16, the red dots will disappear.
+                                    Zoom in again to level 16 or more to see the red dots.
+                                </li>
+                                <li>
+                                    Opacity: The opacity of each dot is scaled based on the number of transactions at the
+                                    location. The scaling is set to a maximum of 200 transactions, which means as the number of
+                                    transactions increases from 0 to 200, the shade of the dot will become darker, and it
+                                    will stop changing beyond 200. The downside of this is that you won’t be able to
+                                    differentiate a point with 200 transactions from another point with 1000 transactions.
+                                    However, 200 was chosen as most locations have less than 200 transactions.
+                                </li>
+                            </ul>
+
+                        </li>
+                    </ul>
+                    <div class="about-header">Data notes</div>
+                    <ul>
+                        <li>
+                            To keep the size of the database small, so as to minimise cloud database cost, the application
+                            only shows property transaction data within London.
+                        </li>
+                        <li>
+                            The data is updated up till 23 August 2017, which is the last extraction date.
+                        </li>
+                        <li>
+                            Transaction table columns: PAON stands for Primary Addressable Object Name, SAON stands for
+                            Secondary Addressable Object Name.
+                        </li>
+                    </ul>
+                    <div class="about-header">Technical notes</div>
+                    <ul>
+                        <li>
+                            The core of the project is built with Django, powered mainly by Google Maps API. It is also
+                            integrated with Disqus API for comment/discussion feature.
+                        </li>
+                        <li>
+                            Property transactions and UK postcode data were extracted from HM Land Registry and Open Data
+                            Camden, via a SPARQL query API and direct download respectively. Both platforms offer extensive
+                            data for public access.
+                        </li>
+                        <li>
+                            The application is deployed using Google App Engine.
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <script>

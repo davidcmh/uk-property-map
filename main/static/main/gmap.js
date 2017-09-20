@@ -34,6 +34,7 @@ function initMap() {
   document.getElementById("comment-btn").onclick = showDisqusContainer;
   document.getElementById("info-btn").onclick = showInfoContainer;
   document.getElementById("like-btn").onclick = incrementLikeCount;
+  document.getElementById("about-close-btn").onclick = hideInfoContainer;
 
   // Create the search box and link it to the UI element.
     var input = document.getElementById('pac-input');
@@ -88,6 +89,8 @@ function initMap() {
       map.fitBounds(bounds);
       map.setZoom(existingZoomLvl);
     });
+
+    showInfoContainer();
 }
 
 function getCookie(name) {
