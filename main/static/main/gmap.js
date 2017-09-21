@@ -22,7 +22,13 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: london,
     zoom: 16,
-    styles: mapStyle
+    styles: mapStyle,
+    zoomControl: true,
+    mapTypeControl: true,
+    scaleControl: true,
+    streetViewControl: false,
+    rotateControl: false,
+    fullscreenControl: false
   });
 
   var timeout;
